@@ -3,7 +3,7 @@ package com.sns.common;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class EncryptUntils {
+public class EncryptUtils {
 	public static String md5(String message) {
 		String encData = "";
 		try {
