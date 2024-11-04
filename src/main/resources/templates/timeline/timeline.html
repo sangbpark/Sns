@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/defaultLayout}">
+<section layout:fragment="content" class="contents d-flex justify-content-center">
+	<div class="w-50">
+		<div id="writing" th:if="${session.userName != null}">
+			<div class="p-3">
+				<textarea class="form-control border-0" id="content" placeholder="내용을 입력하세요."></textarea>
+				<div class="d-flex justify-content-between">					
+					<input type="file" class="form-control-file border-0" id="imageFile" name="file">
+					<button type="button" id="uploadBtn" class="btn btn-info rounded">업로드</button>
+				</div>
+			</div>		
+		</div>
+		<div id="postCards">
+			<div id="postCard">
+				<div id="postCardHeader" class="d-flex justify-content-between align-items-center p-2 alert-dark">
+					<span>글쓴이</span>
+					<button type="button" class="btn btn-warning h-100">더보기</button>
+				</div>
+				<div id="postCardBody" class="p-3">
+					<div id="postCardimage" class="d-flex justify-content-center align-items-center">
+						<img src="" alt="게시글 이미지">
+					</div>
+					<div id="postCardLike" class="d-flex justify-content-start">
+						<img src="" alt="좋아요">
+						<span>좋아요 12개</span>
+					</div>
+					<div id="postCardContent" class="d-flex">
+						<div>글쓴이</div>
+						<div class=""></div>
+					</div>
+					<div class="d-flex justify-content-start align-items-center alert-dark">
+					<small>댓글</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<th:block layout:fragment="script">
+    <script>
+
+    </script>
+</th:block>

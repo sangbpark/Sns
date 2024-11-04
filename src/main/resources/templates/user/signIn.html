@@ -55,7 +55,7 @@ layout:decorate="~{layout/defaultLayout}">
 				$.post(url, params)
 				.done(function(data) {
 					if (data.code == 200) {
-						location.href = "/post/post-list-view";
+						location.href = "/timeline";
 					} else {
 						alert(data.error_message);
 					}
