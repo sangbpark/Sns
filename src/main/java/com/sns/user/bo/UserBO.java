@@ -1,6 +1,7 @@
 package com.sns.user.bo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.sns.common.EncryptUtils;
@@ -26,7 +27,7 @@ public class UserBO {
 	        		.name(name)
 	        		.email(email)
 	        		.build());
-	    } catch (org.springframework.dao.DataIntegrityViolationException e) {
+	    } catch (DataIntegrityViolationException e) {
 	        return null;
 	    }
 	}

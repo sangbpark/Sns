@@ -13,7 +13,7 @@ public class PostBO {
 	@Autowired
 	private PostRepository postRepository;
 	
-	public List<PostEntity> getPostOderByIdDesc() {
+	public List<PostEntity> getPostListOderByIdDesc() {
 		return postRepository.findAllByOrderByIdDesc();
 	};
 }

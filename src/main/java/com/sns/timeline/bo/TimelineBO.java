@@ -26,7 +26,7 @@ public class TimelineBO {
 	public List<Timeline> getTimelineList() {
 		List<Timeline> timelineList = new ArrayList<>();
 		
-		List<PostEntity> postList = postBO.getPostOderByIdDesc();
+		List<PostEntity> postList = postBO.getPostListOderByIdDesc();
 		if (postList.isEmpty()) {
 			return timelineList;
 		} else {
@@ -35,6 +35,7 @@ public class TimelineBO {
 				timeline.setPostId(post.getId());
 				timeline.setName(post.getUser().getNickName());
 				timeline.setImagePath(post.getImagePath());
+				timeline.setContent(post.getContent());
 				timeline.setLikeCount(likeBO.getLikeListByPostId(post.getId()).size());
 				timeline.setComment(commentBO.getCommentListByPostId(post.getId()));
 				timelineList.add(timeline);

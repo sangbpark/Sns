@@ -6,7 +6,7 @@
 <section layout:fragment="content" class="contents d-flex justify-content-center">
 	<div class="contents-box">
 		<!-- 글쓰기 영역(로그인 된 사람만 보임) -->
-		<div class="write-box border rounded m-3">
+		<div th:if="${session.userSimple != null}" class="write-box border rounded m-3" >
 			<textarea id="writeTextArea" placeholder="내용을 입력해주세요" class="w-100 border-0"></textarea>
 			
 			<div class="d-flex justify-content-between">
@@ -27,10 +27,10 @@
 		<div class="timeline-box my-5">
 			
 			<!-- 글(카드) 반복 -->
-			<div class="card border rounded mt-3">
+			<div th:each="post : ${timelineList}" class="card border rounded mt-3">
 				<!-- 글쓴이, 더보기(삭제) -->
 				<div class="p-2 d-flex justify-content-between">
-					<span class="font-weight-bold">글쓴이</span>
+					<span class="font-weight-bold" th:text="${post.name}">글쓴이</span>
 					
 					<!-- 더보기 ...(로그인 된 사람과 글쓴이 정보 일치할 때 보이게) -->
 					<a href="#" class="more-btn">
@@ -40,8 +40,7 @@
 				
 				<!-- 본문 이미지 -->
 				<div class="card-img">
-					[[${postList}]]
-					<img src="https://cdn.pixabay.com/photo/2020/06/20/11/09/cat-5320572_1280.jpg" class="w-100" alt="본문 이미지">
+					<img th:src="${post.imagePath}" class="w-100" alt="본문 이미지">
 				</div>
 				
 				<!-- 좋아요 -->
@@ -49,13 +48,13 @@
 					<a href="#" class="like-btn">
 						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="empty heart">
 					</a>
-					<span>좋아요 13개</span>
+					<span th:text="'좋아요 ' + ${post.likeCount} + '개'">좋아요 13개</span>
 				</div>
 				
 				<!-- 글 -->
 				<div class="card-post m-3">
-					<span class="font-weight-bold">글쓴이</span>
-					<span>글 내용입니다!!!!</span>
+					<span class="font-weight-bold" th:text="${post.name}">글쓴이</span>
+					<span th:text="${post.content}">글 내용입니다!!!!</span>
 				</div>
 				
 				<!-- 댓글 제목 -->
@@ -66,9 +65,9 @@
 				<!-- 댓글 목록 -->
 				<div class="card-comment-list m-2">
 					<!-- 댓글들 -->
-					<div class="card-comment m-1">
-						<span class="font-weight-bold">댓글쓰니</span>
-						<span>댓글 내용임</span>
+					<div th:each="comment : ${post.comment}" class="card-comment m-1">
+						<span class="font-weight-bold" th:text="${comment.userId}">댓글쓰니</span>
+						<span th:text="${comment.content}">댓글 내용임</span>
 						
 						<!-- 댓글 삭제(자신의 댓글만 가능) -->
 						<a href="#" class="comment-del-btn">
