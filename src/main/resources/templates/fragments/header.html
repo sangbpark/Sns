@@ -6,11 +6,11 @@
 			<div>
 				<h1>Marondalgram</h1>
 			</div>
-			<div th:if="${session.userName != null}")>
-				<span th:text="${session.userName} + '님 안녕하세요'">유저님 안녕하세요</span>
+			<div th:if="${session.userSimple != null}")>
+				<span th:text="${session.userSimple.userName} + '님 안녕하세요'">유저님 안녕하세요</span>
 				<a href="/user/sign-out">로그아웃</a>
 			</div>
-			<div th:unless="${session.userName != null}")>
+			<div th:unless="${session.userSimple != null}")>
 				<a href="/user/sign-in-view">로그인</a>
 			</div>
 			

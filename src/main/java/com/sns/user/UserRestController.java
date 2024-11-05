@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sns.common.EncryptUtils;
 import com.sns.user.Enitity.UserEntity;
 import com.sns.user.bo.UserBO;
+import com.sns.user.dto.UserSimple;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -65,9 +65,12 @@ public class UserRestController {
 		if (user != null) {
 			// 세션에 사용자 정보를 담는다.(사용자 각각을)
 			HttpSession session =  request.getSession();
-			session.setAttribute("userId", user.getId());
-			session.setAttribute("userLoginId", user.getLoginId());
-			session.setAttribute("userName", user.getName());
+			UserSimple userSimple = UserSimple.builder()
+					.userId(user.getId())
+					.userLoginId(user.getLoginId())
+					.userName(user.getName())
+					.build();
+			session.setAttribute("userSimple", userSimple);
 			result.put("code", 200);
 			result.put("result", "성공");
 			

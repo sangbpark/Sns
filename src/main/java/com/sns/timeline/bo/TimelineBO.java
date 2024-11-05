@@ -6,27 +6,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sns.comment.mapper.CommentMapper;
-import com.sns.like.mapper.LikeMapper;
+import com.sns.comment.bo.CommentBO;
+import com.sns.like.bo.LikeBO;
+import com.sns.post.bo.PostBO;
 import com.sns.post.entity.PostEntity;
-import com.sns.post.repository.PostRepository;
 import com.sns.timeline.domain.Timeline;
 
 @Service
 public class TimelineBO {
 	@Autowired
-	private PostRepository postRepository;
+	private PostBO postBO;
 	
 	@Autowired
-	private CommentMapper commentMapper;
+	private CommentBO commentBO;
 	
 	@Autowired
-	private LikeMapper likeMapper;
+	private LikeBO likeBO;
 	
 	public List<Timeline> getTimelineList() {
 		List<Timeline> timelineList = new ArrayList<>();
 		
-		List<PostEntity> postList = postRepository.findAllByOrderByIdDesc();
+		List<PostEntity> postList = postBO.getPostOderByIdDesc();
 		if (postList.isEmpty()) {
 			return timelineList;
 		} else {
@@ -35,8 +35,8 @@ public class TimelineBO {
 				timeline.setPostId(post.getId());
 				timeline.setName(post.getUser().getNickName());
 				timeline.setImagePath(post.getImagePath());
-				timeline.setLikeCount(likeMapper.selectLikeListByPostId(post.getId()).size());
-				timeline.setComment(commentMapper.selectCommentByPostId(post.getId()));
+				timeline.setLikeCount(likeBO.getLikeListByPostId(post.getId()).size());
+				timeline.setComment(commentBO.getCommentListByPostId(post.getId()));
 				timelineList.add(timeline);
 			}
 		}

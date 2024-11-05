@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserSimple {
 	private int userId;
-	private int userLoginId;
+	private String userLoginId;
 	private String userName;
 }

@@ -22,9 +22,8 @@ public class UserController {
 
 	@GetMapping("/sign-out")
 	public String signOut(HttpSession session) {
-		session.removeAttribute("userId");
-		session.removeAttribute("userLoginId");
-		session.removeAttribute("userName");
+		session.removeAttribute("userSimple");
+		
 		
 		return "redirect:/user/sign-in-view";
 	}
