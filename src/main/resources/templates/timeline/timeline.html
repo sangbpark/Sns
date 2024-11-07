@@ -10,7 +10,7 @@
 			<textarea id="writeTextArea" placeholder="내용을 입력해주세요" class="w-100 border-0"></textarea>
 			
 			<div class="d-flex justify-content-between">
-				<div class="file-upload d-flex">
+				<div class="file-upload d-flex align-items-center">
 					<!-- file 태그를 숨겨두고 이미지를 클릭하면 파일을 클릭한 것과 같은 효과를 준다. -->
 					<input type="file" id="file" accept=".jpg, .png, .gif" class="d-none">
 				
@@ -66,7 +66,7 @@
 				<div class="card-comment-list m-2">
 					<!-- 댓글들 -->
 					<div th:each="comment : ${post.comment}" class="card-comment m-1">
-						<span class="font-weight-bold" th:text="${comment.userId}">댓글쓰니</span>
+						<span class="font-weight-bold" th:text="${comment.nickName}">댓글쓰니</span>
 						<span th:text="${comment.content}">댓글 내용임</span>
 						
 						<!-- 댓글 삭제(자신의 댓글만 가능) -->
@@ -88,6 +88,78 @@
 
 <th:block layout:fragment="script">
     <script>
-
+		$(document).ready(function() {
+			// 이미지 a태그 클릭 => 숨겨져 있는 id="file" 동작 시킨다.
+			$("#fileUploadBtn").on("click", function (e) {
+				e.preventDefault(); // 위로 올라가는 현상 방지
+				$("#file").click();				
+			});
+			
+			$("#file").on("change", function(e) {
+				// 취소 누를 때 처리(파일이 비워지므로 name을 뽑다가 에러)
+				if (e.target.files[0] == null){
+					$("#fileName").val(""); // 보이진 않지만 파일 태그에 올라온 것 제거
+					$("#fileName").text(""); // 파일명도 초기화
+					return;
+				}
+				let fileName = e.target.files[0].name;
+				
+				let ext = fileName.split(".").pop().toLowerCase();
+				console.log(ext);
+				
+				if (ext != "gif" && ext != "png" && ext != "jpg") {
+					alert("이미지 파일만 업로드 할 수 있습니다.")
+					$("#fileName").val(""); // 보이진 않지만 파일 태그에 올라온 것 제거
+					$("#fileName").text(""); // 파일명도 초기화
+					return;
+				}
+				
+				$("#fileName").text(fileName);
+			});
+			
+			$("#writeBtn").on("click", function() {
+				let fileName = $("#file").val();
+				let content = $("#writeTextArea").val();
+				if (!fileName) {
+					alert("파일을 업로드 하세요.");
+					return;
+				}
+				
+				let ext = fileName.split(".").pop().toLowerCase();
+				
+				if (ext != "gif" && ext != "png" && ext != "jpg") {
+					alert("이미지 파일만 업로드 할 수 있습니다.")
+					$("#fileName").val(""); // 보이진 않지만 파일 태그에 올라온 것 제거
+					$("#fileName").text(""); // 파일명도 초기화
+					return;
+				}
+				
+				let formData = new FormData();
+				formData.append("content", content)
+				formData.append("file", $("#file")[0].files[0]);
+				
+				$.ajax({
+					type:"POST"
+					, url:"/post/create"
+					, data: formData
+					, processData:false  // 파일업로드 필수 설정
+					, contentType:false  // 파일업로드 필수 설정
+					, enctype:"multipart/form-data"  // 파일업로드 필수 설정
+					, success:function(data) {
+						if(data.code == 200) {
+							location.reload();
+						} else if (data.code == 500){
+							alert(data.error_message);
+						} else if (data.code == 300) {
+							alert(data.error_message);
+							location.href="/user/sign-in-view";
+						}						
+					}
+					, error:function(e) {
+						alert("게시글쓰기에 실패 했습니다.");
+					}
+				});
+			});
+		});
     </script>
 </th:block>

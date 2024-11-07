@@ -2,7 +2,7 @@ package com.sns.timeline.domain;
 
 import java.util.List;
 
-import com.sns.comment.domain.Comment;
+import com.sns.comment.domain.CommentDTO;
 
 import lombok.Data;
 
@@ -13,5 +13,5 @@ public class Timeline {
 	private String imagePath;
 	private int likeCount;
 	private String content;
-	private List<Comment> comment;	 
+	private List<CommentDTO> comment;	 
 }

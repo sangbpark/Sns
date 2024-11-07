@@ -37,7 +37,7 @@ public class TimelineBO {
 				timeline.setImagePath(post.getImagePath());
 				timeline.setContent(post.getContent());
 				timeline.setLikeCount(likeBO.getLikeListByPostId(post.getId()).size());
-				timeline.setComment(commentBO.getCommentListByPostId(post.getId()));
+				timeline.setComment(commentBO.getCommentListByPostIdJoinUser(post.getId()));
 				timelineList.add(timeline);
 			}
 		}

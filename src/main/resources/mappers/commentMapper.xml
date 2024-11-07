@@ -17,4 +17,25 @@
 		WHERE
 			`postId` = #{postId}
 	</select>
+	
+	<select id="selectCommentByPostIdJoinUser"
+			parameterType="int"
+			resultType="com.sns.comment.domain.CommentDTO">
+		SELECT
+			C.`id`
+			, C.`userId`
+			, C.`content`
+			, C.`createdAt`
+			, C.`updatedAt`
+			, U.`nickName`
+		FROM
+			`comment` as C 
+		JOIN
+			`user` as U 
+		ON
+			U.`id` = C.`userId`
+		WHERE
+			C.`postId` = #{postId}
+	
+	</select>
 </mapper>
