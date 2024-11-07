@@ -2,23 +2,31 @@ package com.sns.comment.bo;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sns.comment.domain.Comment;
 import com.sns.comment.domain.CommentDTO;
 import com.sns.comment.mapper.CommentMapper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class CommentBO {
-	@Autowired
-	private CommentMapper commentRepository;
+	private final CommentMapper commentMapper;
 	
 	public List<Comment> getCommentListByPostId(int postId) {
-		return commentRepository.selectCommentByPostId(postId);
+		return commentMapper.selectCommentByPostId(postId);
 	};
 	
 	public List<CommentDTO> getCommentListByPostIdJoinUser(int postId) {
-		return commentRepository.selectCommentByPostIdJoinUser(postId);
+		return commentMapper.selectCommentByPostIdJoinUser(postId);
 	};
+	
+	public boolean addComment(int userId, int postId, String content) {
+		if (commentMapper.insertComment(userId, postId, content) > 0) {
+			return true;
+		};
+		return false;
+	}
 }

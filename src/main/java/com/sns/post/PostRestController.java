@@ -3,7 +3,6 @@ package com.sns.post;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,12 +14,13 @@ import com.sns.post.entity.PostEntity;
 import com.sns.user.dto.UserSimple;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RequestMapping("/post")
 @RestController
 public class PostRestController {
-	@Autowired
-	private PostBO postBO;
+	private final PostBO postBO;
 	
 	@PostMapping("/create")
 	public Map<String, Object> postCreate(
@@ -30,7 +30,7 @@ public class PostRestController {
 		UserSimple user = (UserSimple)session.getAttribute("userSimple");
 		Map<String, Object> result = new HashMap<>();
 		if (user == null) {
-			result.put("code", 300);
+			result.put("code", 403);
 			result.put("error_message", "로그인 하세요.");
 			return result;
 		}

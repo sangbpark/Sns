@@ -3,7 +3,6 @@ package com.sns.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +15,13 @@ import com.sns.user.dto.UserSimple;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RequestMapping("/user")
 @RestController
 public class UserRestController {
-	@Autowired
-	private UserBO userBO;
+	private final UserBO userBO;
 	
 	@GetMapping("/is-duplicate-id")
 	public Map<String, Object> isDuplicateId(

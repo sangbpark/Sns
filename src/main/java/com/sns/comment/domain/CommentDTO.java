@@ -2,9 +2,13 @@ package com.sns.comment.domain;
 
 import java.time.LocalDateTime;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
+@Setter 
 public class CommentDTO {
 	private int id;
 	private int userId;

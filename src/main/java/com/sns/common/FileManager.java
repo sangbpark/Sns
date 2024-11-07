@@ -28,11 +28,11 @@ public class FileManager  {
 			byte[] bytes = file.getBytes();
 			Path path = Paths.get(filePath + file.getOriginalFilename());
 			Files.write(path, bytes);
+			return "/images/" + directoryName + "/" + file.getOriginalFilename();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null; 
 		}
 
-		return "/images/" + directoryName + "/" + file.getOriginalFilename();
 	}
 }

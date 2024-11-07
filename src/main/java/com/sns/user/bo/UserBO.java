@@ -1,6 +1,5 @@
 package com.sns.user.bo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -8,10 +7,12 @@ import com.sns.common.EncryptUtils;
 import com.sns.user.Enitity.UserEntity;
 import com.sns.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class UserBO {
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 	
 	public boolean isDupilcateId(String loginId) {
 		return userRepository.findByLoginId(loginId).isPresent();

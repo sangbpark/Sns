@@ -3,7 +3,6 @@ package com.sns.timeline.bo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sns.comment.bo.CommentBO;
@@ -12,16 +11,15 @@ import com.sns.post.bo.PostBO;
 import com.sns.post.entity.PostEntity;
 import com.sns.timeline.domain.Timeline;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class TimelineBO {
-	@Autowired
-	private PostBO postBO;
-	
-	@Autowired
-	private CommentBO commentBO;
-	
-	@Autowired
-	private LikeBO likeBO;
+
+	private final PostBO postBO;
+	private final CommentBO commentBO;
+	private final LikeBO likeBO;
 	
 	public List<Timeline> getTimelineList() {
 		List<Timeline> timelineList = new ArrayList<>();
