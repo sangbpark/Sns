@@ -1,6 +1,5 @@
 package com.sns.post;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,8 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sns.ajaxresult.AjaxResultBO;
+import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.ResultParameter;
+import com.sns.ajaxresult.UserAuthorityResult;
 import com.sns.post.bo.PostBO;
-import com.sns.post.entity.PostEntity;
 import com.sns.user.dto.UserSimple;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,20 +30,14 @@ public class PostRestController {
 			@RequestParam("file") MultipartFile file,
 			HttpSession session) {
 		UserSimple user = (UserSimple)session.getAttribute("userSimple");
-		Map<String, Object> result = new HashMap<>();
 		if (user == null) {
-			result.put("code", 403);
-			result.put("error_message", "로그인 하세요.");
-			return result;
+			return new AjaxResultBO(new UserAuthorityResult())
+					 .getResult(new ResultParameter(false));
 		}
-		PostEntity post = postBO.addPost(user.getUserId(), content, file, user.getUserLoginId() );
-		if (post != null) {
-			result.put("code", 200);
-			result.put("result", "성공");
-		} else {
-			result.put("code", 500);
-			result.put("error_message", "게시글 업로드에 실패했습니다.");
-		}
-		return result;
+		boolean isSuccess = postBO.addPost(user.getUserId(), content, file, user.getUserLoginId() );
+
+		return new AjaxResultBO(new NomalResult())
+				.getResult(new ResultParameter(isSuccess)
+				.withMessage("게시글 등록에 실패했습니다."));
 	}
 }

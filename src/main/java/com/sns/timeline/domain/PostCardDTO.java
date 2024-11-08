@@ -4,10 +4,18 @@ import java.util.List;
 
 import com.sns.comment.domain.CommentDTO;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
-public class Timeline {
+@Getter
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostCardDTO {
 	private int postId;
 	private String Name;
 	private String imagePath;

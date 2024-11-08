@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sns.ajaxresult.AjaxResultBO;
+import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.ResultParameter;
+import com.sns.ajaxresult.UserAuthorityResult;
 import com.sns.comment.bo.CommentBO;
 import com.sns.user.dto.UserSimple;
 
@@ -35,22 +39,15 @@ public class CommentRestController {
 			@RequestParam("content") String content,
 			HttpSession session) {
 		UserSimple user = (UserSimple)session.getAttribute("userSimple");
-		Map<String, Object> result = new HashMap<>();
 		if (user == null) {
-			result.put("code", 403);
-			result.put("error_message", "로그인이 필요한 서비스 입니다.");
-			return result;
+			return new AjaxResultBO(new UserAuthorityResult())
+					 .getResult(new ResultParameter(false));
 		}
 		boolean isSuccess = commentBO.addComment(user.getUserId(), postId, content);
 		
-		if (isSuccess) {
-			result.put("code", 200);
-			result.put("result", "성공");
-		} else {
-			result.put("code", 500);
-			result.put("error_message", "댓글 등록에 실패했습니다.");
-		}
-		return result;
+		return new AjaxResultBO(new NomalResult())
+				.getResult(new ResultParameter(isSuccess)
+				.withMessage("댓글 등록에 실패했습니다."));
 	}
 	
 	@DeleteMapping("/delete")

@@ -15,7 +15,7 @@ public class TimelineController {
 	
 	@GetMapping("/timeline")
 	public String timeline(Model model) {
-		model.addAttribute("timelineList", timelineBO.getTimelineList());
+		model.addAttribute("postCardList", timelineBO.generatePostCardList());
 		return "timeline/timeline";
 	}
 }

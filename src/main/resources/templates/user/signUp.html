@@ -67,7 +67,7 @@
     				, data:{"loginId":loginId}
     				, success: function(data) {
     					if (data.code == 200) {
-    						if (data.is_duplicate_id) {
+    						if (data.is_duplicate) {
     							$("#idCheckDuplicated").removeClass("d-none");
     						} else {
     							$("#idCheckOk").removeClass("d-none");

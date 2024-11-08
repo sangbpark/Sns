@@ -1,6 +1,5 @@
 package com.sns.user;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sns.ajaxresult.AjaxResultBO;
+import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.ResultParameter;
+import com.sns.ajaxresult.UserAuthorityResult;
 import com.sns.user.Enitity.UserEntity;
 import com.sns.user.bo.UserBO;
 import com.sns.user.dto.UserSimple;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -29,10 +31,8 @@ public class UserRestController {
 		
 		boolean isDuplicateId = userBO.isDupilcateId(loginId);
 		
-		Map<String, Object> result = new HashMap<>();
-		result.put("code", 200);
-		result.put("is_duplicate_id", isDuplicateId);
-		return result;
+		return new AjaxResultBO(new NomalResult())
+				.getResult(new ResultParameter(isDuplicateId));
 	}
 	
 	@PostMapping("/sign-up")
@@ -42,42 +42,33 @@ public class UserRestController {
 			@RequestParam("name") String name,
 			@RequestParam("email") String email) {
 		
-		UserEntity user = userBO.addUser(loginId, password, name, email);
-		Map<String, Object> result = new HashMap<>();
-		if (user != null) {
-			result.put("code", 200);
-			result.put("result", "성공");
-		} else {
-			result.put("code", 500);
-			result.put("error_message", "회원가입에 실패했습니다.");
-		}
-		return result;
+		boolean isSuccess = userBO.addUser(loginId, password, name, email);
+		return new AjaxResultBO(new NomalResult())
+				.getResult(new ResultParameter(isSuccess)
+				.withMessage("회원가입에 성공했습니다."));
 	}
 	
 	@PostMapping("/sign-in")
 	public Map<String, Object> signIn(
 			@RequestParam("loginId") String loginId,
 			@RequestParam("password") String password,
-			HttpServletRequest request) {
+			HttpSession session) {
 		// db select
 		UserEntity user = userBO.getUserEntityByLoginIdAndPassword(loginId, password);
-		Map<String, Object> result = new HashMap<>();
+		boolean isSuccess = false;
 		if (user != null) {
-			// 세션에 사용자 정보를 담는다.(사용자 각각을)
-			HttpSession session =  request.getSession();
-			UserSimple userSimple = UserSimple.builder()
+			UserSimple userS = UserSimple
+					.builder()
 					.userId(user.getId())
 					.userLoginId(user.getLoginId())
-					.userName(user.getName())
+					.userName(user.getNickName())
 					.build();
-			session.setAttribute("userSimple", userSimple);
-			result.put("code", 200);
-			result.put("result", "성공");
-			
-		} else {
-			result.put("code", 300); // 권한이 없으면 300
-			result.put("error_message", "존재하지 않는 사용자 입니다.");
+			session.setAttribute("userSimple", userS);
+			isSuccess = true;
 		}
-		return result;
+	
+		return new AjaxResultBO(new UserAuthorityResult())
+				.getResult(new ResultParameter(isSuccess)
+				.withMessage("권한이 없는 사용자 입니다."));
 	}
 }

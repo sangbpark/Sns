@@ -18,18 +18,19 @@ public class UserBO {
 		return userRepository.findByLoginId(loginId).isPresent();
 	}
 	
-	public UserEntity addUser(String loginId, String password, String name, String email) {
+	public boolean addUser(String loginId, String password, String name, String email) {
 		String hashedPassword = EncryptUtils.md5(password);
 		try {
-			return userRepository.save(
+			userRepository.save(
 	        		UserEntity.builder()
 	        		.loginId(loginId)
 	        		.password(hashedPassword)
 	        		.name(name)
 	        		.email(email)
 	        		.build());
+			return true;
 	    } catch (DataIntegrityViolationException e) {
-	        return null;
+	        return false;
 	    }
 	}
 	

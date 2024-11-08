@@ -23,17 +23,18 @@ public class PostBO {
 	};
 	
 	
-	public PostEntity addPost(int userId, String content, MultipartFile file , String loginId) {
+	public boolean addPost(int userId, String content, MultipartFile file , String loginId) {
 		String imagePath = fileManger.uploadFile(file, loginId);
 		try {
-			return postRepository.save(PostEntity
+			postRepository.save(PostEntity
 						.builder()
 						.userId(userId)
 						.content(content)
 						.imagePath(imagePath)
 						.build());
+			return true;
 		} catch (DataIntegrityViolationException e) {
-	        return null;
+	        return false;
 	    }
 	}
 }
