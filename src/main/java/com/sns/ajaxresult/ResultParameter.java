@@ -1,25 +1,50 @@
 package com.sns.ajaxresult;
 
-public class ResultParameter {
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-    private boolean success;
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResultParameter<T> {
+
+    private ResultStatusCode code;
     private String message;
+    private boolean success;
+    private T data;
     
-
-    public ResultParameter(boolean success) {
-        this.success = success;
+    public ResultParameter(ResultStatusCode code) {
+        this.code = code;
     }
-
-    public ResultParameter withMessage(String message) {
-        this.message = message;
+    
+    public ResultParameter<T> withBoolean (boolean success) {
+        this.success = success;
         return this;
     }
 
-    public boolean isSuccess() {
-        return success;
+
+	public ResultParameter<T> withMessage(String message) {
+        this.message = message;
+		return this;
+    }
+    
+    public ResultParameter<T> withData (T data) {
+    	this.data = data;
+    	return this;
     }
 
-    public String getMessage() {
-        return message;
-    }
+	public ResultStatusCode getCode() {
+		return code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public T getData() {
+		return data;
+	}   
+	
+	public boolean isSuccess() {
+		return success;
+	}
 }

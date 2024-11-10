@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sns.ajaxresult.AjaxResultBO;
-import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.AjaxResultSimpleFactory;
 import com.sns.ajaxresult.ResultParameter;
-import com.sns.ajaxresult.UserAuthorityResult;
+import com.sns.ajaxresult.ResultStatusCode;
 import com.sns.comment.bo.CommentBO;
 import com.sns.user.dto.UserSimple;
 
@@ -40,14 +39,16 @@ public class CommentRestController {
 			HttpSession session) {
 		UserSimple user = (UserSimple)session.getAttribute("userSimple");
 		if (user == null) {
-			return new AjaxResultBO(new UserAuthorityResult())
-					 .getResult(new ResultParameter(false));
+			return new AjaxResultSimpleFactory().isSuccess()
+					 .getResult(new ResultParameter<>(ResultStatusCode.FORBIDDEN)
+							 .withMessage("로그인이 필요한 서비스입니다."));
 		}
 		boolean isSuccess = commentBO.addComment(user.getUserId(), postId, content);
 		
-		return new AjaxResultBO(new NomalResult())
-				.getResult(new ResultParameter(isSuccess)
-				.withMessage("댓글 등록에 실패했습니다."));
+		return new AjaxResultSimpleFactory().isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
+							.withMessage("댓글 등록에 실패했습니다.")
+							.withBoolean(isSuccess));
 	}
 	
 	@DeleteMapping("/delete")

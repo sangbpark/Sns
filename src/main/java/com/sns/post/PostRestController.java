@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sns.ajaxresult.AjaxResultBO;
-import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.AjaxResultSimpleFactory;
 import com.sns.ajaxresult.ResultParameter;
-import com.sns.ajaxresult.UserAuthorityResult;
+import com.sns.ajaxresult.ResultStatusCode;
 import com.sns.post.bo.PostBO;
 import com.sns.user.dto.UserSimple;
 
@@ -31,13 +30,17 @@ public class PostRestController {
 			HttpSession session) {
 		UserSimple user = (UserSimple)session.getAttribute("userSimple");
 		if (user == null) {
-			return new AjaxResultBO(new UserAuthorityResult())
-					 .getResult(new ResultParameter(false));
+			return new AjaxResultSimpleFactory()
+					.isSuccess()
+					.getResult(new ResultParameter<>(ResultStatusCode.FORBIDDEN)
+							.withMessage("로그인이 필요한 서비스입니다."));
 		}
 		boolean isSuccess = postBO.addPost(user.getUserId(), content, file, user.getUserLoginId() );
 
-		return new AjaxResultBO(new NomalResult())
-				.getResult(new ResultParameter(isSuccess)
-				.withMessage("게시글 등록에 실패했습니다."));
+		return new AjaxResultSimpleFactory()
+				.isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
+							.withBoolean(isSuccess)
+							.withMessage("게시글 등록에 실패했습니다."));
 	}
 }

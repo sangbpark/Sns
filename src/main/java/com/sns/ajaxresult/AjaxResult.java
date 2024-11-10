@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface AjaxResult {
 
-	public Map<String, Object> getResult(ResultParameter param);
+	public Map<String, Object> getResult(ResultParameter<?> param);
 
 }

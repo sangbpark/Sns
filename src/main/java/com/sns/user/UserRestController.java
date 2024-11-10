@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sns.ajaxresult.AjaxResultBO;
-import com.sns.ajaxresult.NomalResult;
+import com.sns.ajaxresult.AjaxResultSimpleFactory;
 import com.sns.ajaxresult.ResultParameter;
-import com.sns.ajaxresult.UserAuthorityResult;
+import com.sns.ajaxresult.ResultStatusCode;
 import com.sns.user.Enitity.UserEntity;
 import com.sns.user.bo.UserBO;
 import com.sns.user.dto.UserSimple;
@@ -31,8 +30,10 @@ public class UserRestController {
 		
 		boolean isDuplicateId = userBO.isDupilcateId(loginId);
 		
-		return new AjaxResultBO(new NomalResult())
-				.getResult(new ResultParameter(isDuplicateId));
+		return new AjaxResultSimpleFactory()
+				.isDuplicate()
+				.getResult(new ResultParameter<>()
+						.withBoolean(isDuplicateId));
 	}
 	
 	@PostMapping("/sign-up")
@@ -43,9 +44,11 @@ public class UserRestController {
 			@RequestParam("email") String email) {
 		
 		boolean isSuccess = userBO.addUser(loginId, password, name, email);
-		return new AjaxResultBO(new NomalResult())
-				.getResult(new ResultParameter(isSuccess)
-				.withMessage("회원가입에 성공했습니다."));
+		return new AjaxResultSimpleFactory()
+				.isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
+						.withBoolean(isSuccess)
+						.withMessage("회원가입에 실패했습니다."));
 	}
 	
 	@PostMapping("/sign-in")
@@ -67,8 +70,10 @@ public class UserRestController {
 			isSuccess = true;
 		}
 	
-		return new AjaxResultBO(new UserAuthorityResult())
-				.getResult(new ResultParameter(isSuccess)
-				.withMessage("권한이 없는 사용자 입니다."));
+		return new AjaxResultSimpleFactory()
+				.isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.NONMEMBER)
+						.withBoolean(isSuccess)
+						.withMessage("권한이 없는 사용자 입니다."));
 	}
 }
