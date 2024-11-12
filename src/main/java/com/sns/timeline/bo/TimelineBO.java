@@ -2,6 +2,7 @@ package com.sns.timeline.bo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class TimelineBO {
 	private final CommentBO commentBO;
 	private final LikeBO likeBO;
 	
-	public List<PostCardDTO> generatePostCardList() {
+	public List<PostCardDTO> generatePostCardList(OptionalInt userId) {
 		List<PostCardDTO> timelineList = new ArrayList<>();
 		
 		List<PostEntity> postList = postBO.getPostListOderByIdDesc();
@@ -35,9 +36,11 @@ public class TimelineBO {
 						.Name(post.getUser().getNickName())
 						.imagePath(post.getImagePath())
 						.content(post.getContent())
-						.likeCount(likeBO.getLikeListByPostId(post.getId()).size())
+						.likeCount(likeBO.getLikeListByPostId(post.getId()))
 						.comment(commentBO.getCommentListByPostIdJoinUser(post.getId()))
+						.filledLike(likeBO.isFilled(post.getId(), userId))
 						.build();
+				
 				timelineList.add(timeline);
 			}
 		}

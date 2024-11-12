@@ -4,14 +4,63 @@
 <mapper namespace="com.sns.like.mapper.LikeMapper">
 	<select id="selectLikeListByPostId"
 			parameterType="int"
-			resultType="com.sns.like.domain.Like">
+			resultType="int">
 		SELECT
-			`postId`
-			,`userId`
-			,`updatedAt`
+			count(*)
 		FROM
 			`like`
 		WHERE
 			`postId` = #{postId}
 	</select>
+	
+	<select id="selectLikeByPostIdAndUserId"
+			parameterType="map"
+			resultType="int">
+		SELECT
+			count(*)
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId} AND `userId` = #{userId}
+	</select>
+	
+	<!-- count쿼리를 하나로 합친다.
+	<select id="selectLikeCountPostIdOrUserId"
+			parameterType="map"
+			resultType="int">
+		SELECT
+			count(*)
+		FROM
+			`like`
+		WHERE
+			`postId` = #{postId}
+			<if test="userId != null">
+				AND `userId` = #{userId}
+			</if>
+	</select>
+	
+	 -->
+	
+	<insert id="insertLike" parameterType="map">
+		INSERT INTO `like` 
+		(
+			`postId`
+			,`userId`
+			,`updatedAt`
+		)
+		VALUES
+		(
+			#{postId}
+			,#{userId}
+			,NOW()
+		)	
+	</insert>
+	
+	<delete id="deleteLike" parameterType="map">
+		DELETE
+		FROM
+			`like`
+		WHERE
+			postId = #{postId} AND userId=#{userId}
+	</delete>
 </mapper>

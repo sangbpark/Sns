@@ -45,8 +45,9 @@
 				
 				<!-- 좋아요 -->
 				<div class="card-like m-3">
-					<a href="#" class="like-btn">
-						<img src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="empty heart">
+					<a href="#" class="like-btn" th:data-post-id="${postCard.postId}">
+						<img th:if="${postCard.filledLike == false}" src="https://www.iconninja.com/files/214/518/441/heart-icon.png" width="18" height="18" alt="empty heart">
+						<img th:unless="${postCard.filledLike == false}" src="https://www.iconninja.com/files/527/809/128/heart-icon.png" width="18" height="18" alt="filled heart">
 					</a>
 					<span th:text="'좋아요 ' + ${postCard.likeCount} + '개'">좋아요 13개</span>
 				</div>
@@ -70,7 +71,7 @@
 						<span th:text="${comment.content}">댓글 내용임</span>
 						
 						<!-- 댓글 삭제(자신의 댓글만 가능) -->
-						<a  th:if="${comment.userId == session.userSimple.userId}" href="#" class="comment-del-btn">
+						<a  th:if="${ session.userSimple != null && comment.userId == session.userSimple.userId}" href="#" class="comment-del-btn" th:data-comment-id="${comment.id}">
 							<img src="https://www.iconninja.com/files/603/22/506/x-icon.png" width="10" height="10">
 						</a>
 					</div>
@@ -191,6 +192,47 @@
 					
 				});
 				
+			});
+			
+			$(".comment-del-btn").on("click", function(e) {
+				e.preventDefault();
+				let commentId = $(this).data("comment-id");
+				$.ajax({
+					type:"DELETE"
+					, url:"/comment/delete"
+					, data: {"commentId":commentId}
+					, success: function(data) {
+						if(data.code == 200) {
+							location.reload();
+						} else {
+							alert(data.error_message);
+						}
+						
+					}
+					, error: function(e) {
+						alert("댓글 삭제 실패");
+					}
+					
+				});
+			});
+			
+			$(".like-btn").on("click", function(e) {
+				e.preventDefault();
+				let postId = $(this).data("post-id");
+				$.ajax({				
+					url:"/like/" + postId
+					, success: function(data) {
+						if(data.code == 200) {
+							location.reload();
+						} else {
+							alert(data.error_message);
+						}
+						
+					}
+					, error: function(e) {
+						alert("좋아요를 하는데 실패했습니다.");
+					}
+				});
 			});
 		});
     </script>

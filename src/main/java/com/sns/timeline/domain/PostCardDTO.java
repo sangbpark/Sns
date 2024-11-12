@@ -12,7 +12,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostCardDTO {
@@ -21,5 +21,8 @@ public class PostCardDTO {
 	private String imagePath;
 	private int likeCount;
 	private String content;
-	private List<CommentDTO> comment;	 
+	private List<CommentDTO> comment;	
+	
+	// 좋아요 여부
+	private boolean filledLike;
 }

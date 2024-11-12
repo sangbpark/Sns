@@ -1,12 +1,25 @@
 package com.sns.like.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
-
-import com.sns.like.domain.Like;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface LikeMapper {
-	public List<Like> selectLikeListByPostId(int postId);
+	public int selectLikeListByPostId(int postId);
+	
+	public int selectLikeByPostIdAndUserId(
+			@Param("postId")int postId, 
+			@Param("userId")int userId);
+	
+//	public int selectLikeCountPostIdOrUserId(
+//			@Param("postId")int postId, 
+//			@Param("userId")Integer userId); 
+	
+	public int insertLike(
+			@Param("postId")int postId, 
+			@Param("userId")int userId);
+	
+	public int deleteLike(
+			@Param("postId")int postId, 
+			@Param("userId")int userId);
 }

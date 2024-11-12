@@ -29,4 +29,11 @@ public class CommentBO {
 		};
 		return false;
 	}
+	
+	public boolean deleteCommentById(int commentId) {
+		if (commentMapper.deleteCommentById(commentId) > 0) {
+			return true;
+		}
+		return false;
+	};
 }

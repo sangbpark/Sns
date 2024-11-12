@@ -22,7 +22,6 @@ public class PostBO {
 		return postRepository.findAllByOrderByIdDesc();
 	};
 	
-	
 	public boolean addPost(int userId, String content, MultipartFile file , String loginId) {
 		String imagePath = fileManger.uploadFile(file, loginId);
 		try {

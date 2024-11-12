@@ -52,9 +52,22 @@ public class CommentRestController {
 	}
 	
 	@DeleteMapping("/delete")
-	public Map<String, Object> commentDelete() {
-		Map<String, Object> result = new HashMap<>();
-		return result;
+	public Map<String, Object> commentDelete(
+			@RequestParam("commentId") int commentId,
+			HttpSession session) {
+		
+		UserSimple user = (UserSimple)session.getAttribute("userSimple");
+		if (user == null) {
+			return new AjaxResultSimpleFactory().isSuccess()
+					 .getResult(new ResultParameter<>(ResultStatusCode.FORBIDDEN)
+							 .withMessage("로그인이 필요한 서비스입니다."));
+		}
+		
+		boolean isSuccess = commentBO.deleteCommentById(commentId);
+		return new AjaxResultSimpleFactory().isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
+							.withMessage("댓글 삭제에 실패했습니다.")
+							.withBoolean(isSuccess));
 	}
 
 }
