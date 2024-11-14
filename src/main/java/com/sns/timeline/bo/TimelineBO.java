@@ -33,6 +33,7 @@ public class TimelineBO {
 				PostCardDTO timeline = PostCardDTO
 						.builder()
 						.postId(post.getId())
+						.userId(post.getUserId())
 						.Name(post.getUser().getNickName())
 						.imagePath(post.getImagePath())
 						.content(post.getContent())

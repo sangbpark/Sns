@@ -19,4 +19,6 @@ public interface CommentMapper {
 			@Param("content") String content);
 	
 	public int deleteCommentById(int commentId);
+	
+	public int deleteCommentsByPostId(int postId);
 }

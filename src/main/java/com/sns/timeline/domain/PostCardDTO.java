@@ -17,6 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class PostCardDTO {
 	private int postId;
+	private int userId;
 	private String Name;
 	private String imagePath;
 	private int likeCount;

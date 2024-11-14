@@ -36,4 +36,11 @@ public class CommentBO {
 		}
 		return false;
 	};
+	
+	public boolean deleteCommentsByPostId(int postId) {
+		if (commentMapper.deleteCommentsByPostId(postId) > 0) {
+			return true;
+		}
+		return false;
+	};
 }

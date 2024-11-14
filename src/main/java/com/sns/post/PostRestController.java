@@ -2,6 +2,7 @@ package com.sns.post;
 
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,5 +43,26 @@ public class PostRestController {
 				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
 							.withBoolean(isSuccess)
 							.withMessage("게시글 등록에 실패했습니다."));
+	}
+	
+	@DeleteMapping("/delete")
+	public Map<String, Object> postDelete(
+			@RequestParam("postId") int postId,
+			HttpSession session) {
+		UserSimple user = (UserSimple)session.getAttribute("userSimple");
+		if (user == null) {
+			return new AjaxResultSimpleFactory()
+					.isSuccess()
+					.getResult(new ResultParameter<>(ResultStatusCode.FORBIDDEN)
+							.withMessage("로그인이 필요한 서비스입니다."));
+		}
+		
+		boolean isSuccess = postBO.deletePostByPostIdUserId(postId, user.getUserId());
+		
+		return new AjaxResultSimpleFactory()
+				.isSuccess()
+				.getResult(new ResultParameter<>(ResultStatusCode.FAIL)
+							.withBoolean(isSuccess)
+							.withMessage("게시글 삭제에 실패했습니다."));
 	}
 }

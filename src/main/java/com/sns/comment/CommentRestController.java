@@ -1,6 +1,5 @@
 package com.sns.comment;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

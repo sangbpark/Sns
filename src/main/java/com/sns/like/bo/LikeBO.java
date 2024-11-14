@@ -35,6 +35,13 @@ public class LikeBO {
 		return false;
 	}
 	
+	public boolean deleteLikesByPostId(int postId) {
+		if (likeMapper.deleteLikesByPostId(postId) > 0) {
+			return true;
+		} 
+		return false;
+	}
+	
 	public boolean toggleLike(int postId, int userId) {
 		if (likeMapper.selectLikeByPostIdAndUserId(postId, userId) == 0) {
 			if (likeMapper.insertLike(postId, userId) > 0) {
